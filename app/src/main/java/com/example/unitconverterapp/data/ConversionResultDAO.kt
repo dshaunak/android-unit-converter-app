@@ -13,7 +13,7 @@ interface ConversionResultDAO {
     suspend fun insert(conversionResult : ConversionResult)
 
     @Query("SELECT * FROM conversion_table")
-    suspend fun getAll() : Flow<List<ConversionResult>>
+    fun getAll() : Flow<List<ConversionResult>>
 
     @Delete
     suspend fun deleteConversion(conversion : ConversionResult)

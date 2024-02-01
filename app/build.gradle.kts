@@ -54,6 +54,8 @@ dependencies {
     val lifecycle_version = "2.7.0"
     val room_version = "2.6.1"
 
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // ViewModel utilities for Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
     // LiveData
