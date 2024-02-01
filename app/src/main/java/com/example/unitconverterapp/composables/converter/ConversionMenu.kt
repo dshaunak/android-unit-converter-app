@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -28,10 +29,10 @@ import androidx.compose.ui.unit.toSize
 import com.example.unitconverterapp.data.Conversion
 
 @Composable
-fun ConversionMenu(conversionList : List<Conversion>, modifier : Modifier = Modifier, convert : (Conversion) -> Unit) {
+fun ConversionMenu(conversionList : List<Conversion>, isLandscape : Boolean, modifier : Modifier = Modifier, convert : (Conversion) -> Unit) {
 
     //Below variables do not defy the Unidirectional Data Flow logic, as these states belong to UI logic and have nothing to do with business logic. Hence can be defined here in the Composable.
-    var displayingText by remember { mutableStateOf("Select the conversion type") }
+    var displayingText by rememberSaveable { mutableStateOf("Select the conversion type") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) } // To assign the drop down menu the same width as the Text Field.
     var expanded by remember { mutableStateOf(false) }
 
@@ -39,23 +40,43 @@ fun ConversionMenu(conversionList : List<Conversion>, modifier : Modifier = Modi
     else Icons.Filled.KeyboardArrowDown
 
     Column {
-
-        OutlinedTextField(
-            value = displayingText,
-            onValueChange = { displayingText = it },
-            textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
-            modifier = modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { cordinates ->
-                    textFieldSize = cordinates.size.toSize()
+        if (isLandscape) {
+            OutlinedTextField(
+                value = displayingText,
+                onValueChange = { displayingText = it },
+                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                modifier = modifier
+                    .onGloballyPositioned { cordinates ->
+                        textFieldSize = cordinates.size.toSize()
+                    },
+                label = { Text(text = "Conversion Type") },
+                trailingIcon = {
+                    Icon(icon, contentDescription = "icon",
+                        modifier.clickable { expanded = !expanded })
                 },
-            label = { Text(text = "Conversion Type") },
-            trailingIcon = {
-                Icon(icon, contentDescription = "icon",
-                    modifier.clickable { expanded = !expanded })
-            },
-            readOnly = true
-        )
+                readOnly = true
+            )
+        }
+        else{
+            OutlinedTextField(
+                value = displayingText,
+                onValueChange = { displayingText = it },
+                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { cordinates ->
+                        textFieldSize = cordinates.size.toSize()
+                    },
+                label = { Text(text = "Conversion Type") },
+                trailingIcon = {
+                    Icon(icon, contentDescription = "icon",
+                        modifier.clickable { expanded = !expanded })
+                },
+                readOnly = true
+            )
+        }
+
+
 
         DropdownMenu(
             expanded = expanded,
