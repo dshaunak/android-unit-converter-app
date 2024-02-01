@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 
 class ConverterViewModel(private val repository: ConverterRepository) : ViewModel() {
 
-
     fun getConversion() = listOf(
         Conversion(1, "Pounds to Kilograms", "lbs", "kg", 0.453592),
         Conversion(2, "Kilograms to Pounds", "kg", "lbs", 2.20462),
@@ -20,9 +19,17 @@ class ConverterViewModel(private val repository: ConverterRepository) : ViewMode
         Conversion(6, "Kilometers to Miles", "km", "mi", 0.621371)
     )
 
+    val resultList = repository.getSavedResults()
+
     fun addResult(value : String, result : String){
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertResult(ConversionResult(0, value, result))
+        }
+    }
+
+    fun removeResult(item : ConversionResult){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.deleteResult(item)
         }
     }
 }

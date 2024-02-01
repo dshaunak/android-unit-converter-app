@@ -1,4 +1,4 @@
-package com.example.unitconverterapp.composables
+package com.example.unitconverterapp.composables.converter
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

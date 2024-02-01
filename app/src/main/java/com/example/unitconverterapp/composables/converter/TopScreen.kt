@@ -1,18 +1,25 @@
-package com.example.unitconverterapp.composables
+package com.example.unitconverterapp.composables.converter
 
 import android.util.Log
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalFocusManager
 import com.example.unitconverterapp.data.Conversion
-import com.example.unitconverterapp.data.ConversionResult
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 @Composable
-fun TopScreen(conversionList : List<Conversion> , save : (String, String) -> Unit){
+fun TopScreen(
+    conversionList : List<Conversion> ,
+    localFocus: FocusManager = LocalFocusManager.current,
+    save : (String, String) -> Unit
+)
+{
     val selectedConversion : MutableState<Conversion?> = remember { mutableStateOf(null) }
     val inputText = remember { mutableStateOf("") }
     val inputVal = remember { mutableDoubleStateOf(0.0) }
@@ -25,6 +32,7 @@ fun TopScreen(conversionList : List<Conversion> , save : (String, String) -> Uni
 
     selectedConversion.value?.let {
         InputBlock(conversion = it, inputText = inputText){ input ->
+            localFocus.clearFocus(true)
             inputVal.doubleValue = input.toDouble()
         }
     }
